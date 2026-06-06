@@ -1,0 +1,38 @@
+{
+  "name": "Lean + Mathlib",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "leanprover.lean4",
+        "ms-vscode.cpptools",
+        "ms-vscode.cmake-tools",
+        "openai.chatgpt",
+        "mhutchie.git-graph"
+      ],
+      "settings": {
+        "chatgpt.openOnStartup": true,
+        "chatgpt.localeOverride": "ja",
+        "chatgpt.commentCodeLensEnabled": true
+      }
+    }
+  },
+  "mounts": [
+    "source=lean-mathlib-lake-${localWorkspaceFolderBasename},target=/workspaces/${localWorkspaceFolderBasename}/.lake,type=volume",
+    "source=lean-mathlib-cache-${localWorkspaceFolderBasename},target=/home/vscode/.cache/mathlib,type=volume",
+    "source=${localEnv:HOME}/.codex/auth.json,target=/home/vscode/.codex/auth.json,type=bind"
+  ],
+  "runArgs": [
+    "--ulimit",
+    "nofile=1048576:1048576"
+  ],
+  "remoteEnv": {
+    "PATH": "/home/vscode/.elan/bin:${containerEnv:PATH}"
+  },
+  "remoteUser": "vscode",
+  "postCreateCommand": "bash -lc 'set -eux; sudo mkdir -p .lake /home/vscode/.cache/mathlib; sudo chown -R vscode:vscode .lake /home/vscode/.cache/mathlib; lake exe cache get; lake build'"
+}
