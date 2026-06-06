@@ -3,7 +3,14 @@
 VS Code Dev Containers 用の Lean + mathlib 最小テンプレート。
 
 ## 前提
-ホストにVS Code + Dev Container拡張機能 + Docker (+ WSL2) が導入済みで、Codexの認証情報が`~/.codex/auth.json`に格納されている。`auth.json`が異なる場所に存在する場合は、`.devcontainer/devcontainer.json`を適宜変更。
+ホストにVS Code + Dev Container拡張機能 + Docker (+ WSL2) が導入済みで、Codexの認証情報が`~/.codex/auth.json`に格納されている。`auth.json`が異なる場所に存在する場合は、`.devcontainer/devcontainer.json`の下記の箇所を適宜変更。
+
+```json
+...
+// source=${localEnv:HOME}/.codex/auth.jsonをホスト環境に合わせて変更
+"source=${localEnv:HOME}/.codex/auth.json,target=/home/vscode/.codex/auth.json,type=bind"
+...
+```
 
 ## 使い方
 
